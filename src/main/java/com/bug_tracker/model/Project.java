@@ -5,11 +5,9 @@ import java.util.List;
 import javax.persistence.Entity;
 
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 @Entity
 @Data
-@RequiredArgsConstructor
 public class Project {
 
     private long id;
