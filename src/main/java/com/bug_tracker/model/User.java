@@ -18,7 +18,7 @@ public class User {
     private LocalDate createdAt;
 
     public enum UserRole {
-        PROJECT_MANAGER, DEVELOPER, TESTER
+        PROJECT_MANAGER, DEVELOPER, TESTER_ENGINEER, ADMINISTRATOR
     }
 
 }

@@ -16,16 +16,15 @@ public class Ticket {
     private String fullDesctiption;
     private LocalDate createdAt;
     private List<TicketComment> comments;
-    private User userIdentifiedBy;;
+    private User createdBy;;
     private List<User> assignedUsers;
     private List<String> subtasks;
     private LocalDate targetResolutionDate;
     private LocalDate actualResolutionDate;
 
-    private Category category;
+    private TickerType category;
     private Priority priority;
     private Status status;
-    private String statusComment;
 
     public enum Priority {
         TRIVIAL, MINOR, MAJOR, CRITICAL
@@ -35,7 +34,7 @@ public class Ticket {
         UNASSIGNED, ASSIGNED, RESOLVED, CLOSED, REOPENED
     }
 
-    public enum Category {
+    public enum TickerType {
         BUG, TASK
     }
 }
