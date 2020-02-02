@@ -46,6 +46,7 @@ CREATE TABLE ticket_status(
 
 CREATE TABLE tickets(
 	id              SERIAL         PRIMARY KEY,
+	project_id      BIGINT         NOT NULL,
 	title           VARCHAR(30)    NOT NULL,
 	description     VARCHAR,
 	created_at      DATE           NOT NULL,
@@ -62,7 +63,9 @@ CREATE TABLE tickets(
 	CONSTRAINT fk_ticket_priority FOREIGN KEY (ticket_priority)
 		REFERENCES ticket_priority(id),
 	CONSTRAINT fk_ticket_status FOREIGN KEY (ticket_status) 
-		REFERENCES ticket_status(id)
+		REFERENCES ticket_status(id),
+	CONSTRAINT fk_tickets_projects FOREIGN KEY project_id
+		REFERENCES projects(id)
 );
 
 CREATE TABLE ticket_assigned_users(
@@ -79,16 +82,11 @@ CREATE TABLE ticket_comments(
 	id          SERIAL          PRIMARY KEY,
 	comment     VARCHAR         NOT NULL,
 	created_at  DATE            NOT NULL,
+	ticket_id   BIGINT          NOT NULL,
 	created_by  BIGINT          NOT NULL,
 	CONSTRAINT fk_ticket_comment_user FOREIGN KEY (created_by)
-		REFERENCES users(id)
-);
-
-CREATE TABLE ticket_comment_tickets(
-	comment_id   BIGINT         NOT NULL,
-	ticket_id    BIGINT         NOT NULL,
-	CONSTRAINT fk_comment_id_comment FOREIGN KEY (comment_id)
-		REFERENCES ticket_comments(id),
-	CONSTRAINT fk_ticket_id_tickets FOREIGN KEY (ticket_id)
+		REFERENCES users(id),
+	CONSTRAINT fk_ticket_comment_ticket FOREIGN KEY (ticket_id)
 		REFERENCES tickets(id)
 );
+

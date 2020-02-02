@@ -67,5 +67,10 @@ VALUES
 	('2','1'),
 	('5','2');
 	
-INSERT INTO
+INSERT INTO ticket_comments
+	(id, comment, created_at,ticket_id, created_by)
+VALUES 
+	('1', 'Hello! I am a new comment' ,'2001-09-28', '1', '1'),
+	('2', 'Hello! I am a second comment','2001-09-28','1','2'),
+	('3', 'Hello! I am a third comment', '2001-09-28', '2','3');
 		
