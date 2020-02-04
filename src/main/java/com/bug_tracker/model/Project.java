@@ -34,7 +34,8 @@ public class Project {
     private String descripton;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "projects_users", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @JoinTable(name = "projects_users", joinColumns = @JoinColumn(name = "project_id"), 
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> projectMembers;
 
     @OneToMany(fetch = FetchType.LAZY)

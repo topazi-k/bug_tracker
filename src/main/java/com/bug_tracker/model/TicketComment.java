@@ -1,16 +1,73 @@
 package com.bug_tracker.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 import lombok.Data;
 
 @Entity
+@Table(name = "ticket_comments")
 @Data
 public class TicketComment {
+
+    @Id
+    @SequenceGenerator(name = "commentSequence", sequenceName = "ticket_comments_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "commentSequence")
     private long id;
+
+    @Column(name = "comment")
     private String comment;
-    private LocalDate createdAt;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by")
     private User createdBy;
+    
+    @PrePersist
+    public void prePersist() {
+        createdAt=LocalDateTime.now();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        TicketComment other = (TicketComment) obj;
+        if (id != other.id)
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (int) (id ^ (id >>> 32));
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "TicketComment [id=" + id + ", comment=" + comment + ", createdAt=" + createdAt + ", createdBy="
+                + createdBy + "]";
+    }
+    
+    
 }
