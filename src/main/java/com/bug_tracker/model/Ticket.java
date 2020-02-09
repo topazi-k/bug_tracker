@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -47,11 +48,11 @@ public class Ticket {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "ticket_id")
     private List<TicketComment> comments;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "ticket_id")
     private List<TicketLog> logs;
 
@@ -60,35 +61,41 @@ public class Ticket {
     private User createdBy;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "ticket_assigned_users", joinColumns = @JoinColumn(name = "ticket_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @JoinTable(name = "ticket_assigned_users", joinColumns = @JoinColumn(name = "ticket_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> assignedUsers;
-    
-    @Column(name="target_date")
+
+    @Column(name = "target_date")
     private LocalDate targetResolutionDate;
-    
-    @Column(name="actual_date")
+
+    @Column(name = "actual_date")
     private LocalDate actualResolutionDate;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "ticket_type")
     private TicketType category;
-    
+
     @Enumerated(EnumType.STRING)
+    @Column(name = "ticket_priority")
     private TicketPriority priority;
-    
+
     @Enumerated(EnumType.STRING)
+    @Column(name = "ticket_status")
     private TicketStatus status;
 
     @PrePersist
     public void prePersist() {
         createdAt = LocalDateTime.now();
     }
-    
+
     @PreUpdate
     public void preUpdate() {
-        if(status==TicketStatus.CLOSED) {
-            actualResolutionDate=LocalDate.now();
+        if (status == TicketStatus.CLOSED) {
+            actualResolutionDate = LocalDate.now();
         }
+    }
+    
+    public void addComment(TicketComment comment) {
+        comments.add(comment);
     }
 
 }

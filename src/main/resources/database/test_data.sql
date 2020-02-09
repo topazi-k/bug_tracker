@@ -28,9 +28,9 @@ INSERT INTO tickets
 		actual_date, ticket_type, ticket_priority, ticket_status)
 VALUES
 	('1','1' ,'spring security','add authorization & authentication functionality', '2001-09-28', '3', '2001-10-28','2001-11-28', 
-		'2', '3', '2' ),
+		'BUG', 'TRIVIAL', 'ASSIGNED' ),
 	('2','1', 'db migration','db migration with swagger', '2001-09-28', '1', '2001-10-28','2001-11-28', 
-		'2', '2', '2' );
+		'BUG', 'TRIVIAL', 'ASSIGNED' );
 		
 INSERT INTO ticket_assigned_users
 	(user_id, ticket_id)

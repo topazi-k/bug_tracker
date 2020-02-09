@@ -1,7 +1,9 @@
 package com.bug_tracker.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -33,14 +35,21 @@ public class Project {
     @Column(name = "descript")
     private String descripton;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "projects_users", joinColumns = @JoinColumn(name = "project_id"), 
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> projectMembers;
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @JoinTable(name = "projects_users", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<User> projectMembers = new ArrayList<>();;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
-    private List<Ticket> tickets;
+    private List<Ticket> tickets = new ArrayList<>();
+
+    public void addUser(User user) {
+        projectMembers.add(user);
+    }
+
+    public void removeUser(User user) {
+        projectMembers.remove(user);
+    }
 
     @Override
     public String toString() {

@@ -3,8 +3,6 @@ package com.bug_tracker.service;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import javax.transaction.Transactional;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -37,11 +35,9 @@ public class UserService {
         return userRepo.findAll();
     }
 
-    @Transactional
+    
     public User update(User user) {
-        User userToUpdate = findById(user.getId());
-                                                    // how to update?????????????????
-        return userRepo.save(userToUpdate);
+        return userRepo.save(user);
     }
 
     public void delete(long id) {

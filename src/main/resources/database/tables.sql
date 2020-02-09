@@ -12,7 +12,7 @@ CREATE TABLE users(
 	last_name    VARCHAR(20)    NOT NULL,
 	email        VARCHAR(50)    NOT NULL UNIQUE,
 	created_at   DATE,
-	role         VARCHAR         NOT NULL,
+	role         VARCHAR         NOT NULL
 	
 );
 
@@ -39,7 +39,7 @@ CREATE TABLE tickets(
 	ticket_status   VARCHAR        NOT NULL,
 	CONSTRAINT fk_createdBy_user FOREIGN KEY (created_by) 
 		REFERENCES users(id),
-	CONSTRAINT fk_tickets_projects FOREIGN KEY project_id
+	CONSTRAINT fk_tickets_projects FOREIGN KEY (project_id)
 		REFERENCES projects(id)
 );
 
@@ -57,7 +57,7 @@ CREATE TABLE ticket_comments(
 	id          SERIAL          PRIMARY KEY,
 	comment     VARCHAR         NOT NULL,
 	created_at  TIMESTAMP       NOT NULL,
-	ticket_id   BIGINT          NOT NULL,
+	ticket_id   BIGINT,
 	created_by  BIGINT          NOT NULL,
 	CONSTRAINT fk_ticket_comment_user FOREIGN KEY (created_by)
 		REFERENCES users(id),
