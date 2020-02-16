@@ -18,7 +18,7 @@ import com.bug_tracker.model.enums.UserRole;
 import lombok.Data;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 @Data
 public class User {
 
@@ -74,6 +74,5 @@ public class User {
         result = prime * result + (int) (id ^ (id >>> 32));
         return result;
     }
-    
-    
+
 }

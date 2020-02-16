@@ -34,17 +34,18 @@ public class ProjectController {
     }
 
     @PostMapping
-    @ApiOperation(value="Create project", response = Project.class)
+    @ApiOperation(value="Create project")
     @ApiResponses(value = { @ApiResponse(code = 201, message = "Created successfully"),
             @ApiResponse(code = 400, message = "Bad request") })
 
     public ResponseEntity<Project> create(@RequestBody Project project) {
         project = projectService.create(project);
+    
         return new ResponseEntity<>(project, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    @ApiOperation(value="Find existing project by id", response=Project.class)
+    @ApiOperation(value="Find existing project by id")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Successfully"),
             @ApiResponse(code = 404, message = "Project not found") })
     public ResponseEntity<Project> getById(@PathVariable Long id) {

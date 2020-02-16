@@ -17,6 +17,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.bug_tracker.service.jsonserializer.TicketCustomSerializer;
+import com.bug_tracker.service.jsonserializer.UserCustomSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import lombok.Data;
 
 @Entity
@@ -37,10 +41,12 @@ public class Project {
 
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(name = "projects_users", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @JsonSerialize(contentUsing =UserCustomSerializer.class)
     private List<User> projectMembers = new ArrayList<>();;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
+    @JsonSerialize(contentUsing=TicketCustomSerializer.class)
     private List<Ticket> tickets = new ArrayList<>();
 
     public void addUser(User user) {

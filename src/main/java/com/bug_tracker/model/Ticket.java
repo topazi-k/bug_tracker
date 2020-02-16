@@ -26,6 +26,8 @@ import javax.persistence.Table;
 import com.bug_tracker.model.enums.TicketPriority;
 import com.bug_tracker.model.enums.TicketStatus;
 import com.bug_tracker.model.enums.TicketType;
+import com.bug_tracker.service.jsonserializer.UserCustomSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import lombok.Data;
 
@@ -45,23 +47,25 @@ public class Ticket {
     @Column(name = "description")
     private String fullDesctiption;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "ticket_id")
     private List<TicketComment> comments;
 
-    @OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "ticket_id")
     private List<TicketLog> logs;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "created_by")
+    @JsonSerialize(using =UserCustomSerializer.class)
     private User createdBy;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "ticket_assigned_users", joinColumns = @JoinColumn(name = "ticket_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @JsonSerialize(contentUsing =UserCustomSerializer.class)
     private List<User> assignedUsers;
 
     @Column(name = "target_date")
@@ -93,7 +97,7 @@ public class Ticket {
             actualResolutionDate = LocalDate.now();
         }
     }
-    
+
     public void addComment(TicketComment comment) {
         comments.add(comment);
     }

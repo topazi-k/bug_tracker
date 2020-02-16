@@ -14,6 +14,9 @@ import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.bug_tracker.service.jsonserializer.UserCustomSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import lombok.Data;
 
 @Entity
@@ -29,16 +32,17 @@ public class TicketComment {
     @Column(name = "comment")
     private String comment;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
+    @JsonSerialize(using =UserCustomSerializer.class)
     private User createdBy;
-    
+
     @PrePersist
     public void prePersist() {
-        createdAt=LocalDateTime.now();
+        createdAt = LocalDateTime.now();
     }
 
     @Override
@@ -68,6 +72,5 @@ public class TicketComment {
         return "TicketComment [id=" + id + ", comment=" + comment + ", createdAt=" + createdAt + ", createdBy="
                 + createdBy + "]";
     }
-    
-    
+
 }
