@@ -21,27 +21,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     UserDetailsService userDetailService;
     
-   
-   // @Bean
-   // public BCryptPasswordEncoder passwordEncoder() {
-    //    return new BCryptPasswordEncoder();
-   // }
-    
     @Bean
     public PasswordEncoder delegatingPasswordEncoder() {
-        PasswordEncoder defaultEncoder = new BCryptPasswordEncoder();
+     
         Map<String, PasswordEncoder> encoders = new HashMap<>();
         encoders.put("noop", NoOpPasswordEncoder.getInstance());
+        encoders.put("bcrypt", new BCryptPasswordEncoder());
         DelegatingPasswordEncoder passworEncoder = new DelegatingPasswordEncoder(
-          "noop", encoders);
-        passworEncoder.setDefaultPasswordEncoderForMatches(defaultEncoder);
+          "bcrypt", encoders);
         return passworEncoder;
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         
-        auth.userDetailsService(userDetailService);
+        auth.userDetailsService(userDetailService)
+        .passwordEncoder(delegatingPasswordEncoder());
+        
     }
 
     @Override
