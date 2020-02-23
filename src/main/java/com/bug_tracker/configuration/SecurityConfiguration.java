@@ -1,5 +1,8 @@
 package com.bug_tracker.configuration;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -8,16 +11,31 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     UserDetailsService userDetailService;
-
+    
+   
+   // @Bean
+   // public BCryptPasswordEncoder passwordEncoder() {
+    //    return new BCryptPasswordEncoder();
+   // }
+    
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public PasswordEncoder delegatingPasswordEncoder() {
+        PasswordEncoder defaultEncoder = new BCryptPasswordEncoder();
+        Map<String, PasswordEncoder> encoders = new HashMap<>();
+        encoders.put("noop", NoOpPasswordEncoder.getInstance());
+        DelegatingPasswordEncoder passworEncoder = new DelegatingPasswordEncoder(
+          "noop", encoders);
+        passworEncoder.setDefaultPasswordEncoderForMatches(defaultEncoder);
+        return passworEncoder;
     }
 
     @Override
@@ -32,7 +50,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         .antMatchers("/registration").permitAll()
         .antMatchers("/**").authenticated()
-
                 .and().formLogin();
 
     }
