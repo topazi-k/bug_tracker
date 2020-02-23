@@ -4,7 +4,10 @@ CREATE TABLE projects(
 	descript     VARCHAR
 );
 
-
+CREATE TABLE users_roles(
+	id           SERIAL         PRIMARY KEY,
+	role         VARCHAR(20)    
+);
 
 CREATE TABLE users(
 	id           SERIAL         PRIMARY KEY,
@@ -12,8 +15,8 @@ CREATE TABLE users(
 	last_name    VARCHAR(20)    NOT NULL,
 	email        VARCHAR(50)    NOT NULL UNIQUE,
 	created_at   DATE,
-	role         VARCHAR         NOT NULL
-	
+	role         BIGINT,
+	password     VARCHAR        NOT NULL	
 );
 
 CREATE TABLE projects_users(
@@ -73,4 +76,12 @@ CREATE TABLE ticket_log(
 	CONSTRAINT fk_tiket_log_ticket FOREIGN KEY (ticket_id)
 		REFERENCES tickets(id)
 );
+
+ALTER SEQUENCE projects_id_seq INCREMENT BY 50;
+ALTER SEQUENCE ticket_comments_id_seq INCREMENT BY 50;
+ALTER SEQUENCE ticket_log_id_seq INCREMENT BY 50;
+ALTER SEQUENCE tickets_id_seq INCREMENT BY 50;
+ALTER SEQUENCE users_id_seq INCREMENT BY 50;
+ALTER SEQUENCE users_roles_id_seq INCREMENT BY 50;
+
 

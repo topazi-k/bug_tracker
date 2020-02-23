@@ -4,16 +4,18 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.bug_tracker.model.enums.UserRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
@@ -36,11 +38,15 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    @Enumerated(EnumType.STRING)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="role")
     private UserRole role;
 
     @Column(name = "created_at")
     private LocalDate createdAt;
+    
+    @Column(name="password")
+    private String password;
 
     @PrePersist
     public void prePersist() {
@@ -51,6 +57,16 @@ public class User {
     public String toString() {
         return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", role="
                 + role + ", createdAt=" + createdAt + "]";
+    }
+    
+    @JsonIgnore
+    public String getPassword() {
+        return password;
+    }
+    
+    @JsonProperty
+    public void setPassword(String password) {
+        this.password=password;
     }
 
     @Override
