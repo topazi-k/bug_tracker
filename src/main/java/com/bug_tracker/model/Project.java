@@ -37,7 +37,7 @@ public class Project {
     private String projectName;
 
     @Column(name = "descript")
-    private String descripton;
+    private String description;
 
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(name = "projects_users", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
@@ -59,7 +59,7 @@ public class Project {
 
     @Override
     public String toString() {
-        return "Project [id=" + id + ", projectName=" + projectName + ", descripton=" + descripton + "]";
+        return "Project [id=" + id + ", projectName=" + projectName + ", descripton=" + description + "]";
     }
 
     @Override

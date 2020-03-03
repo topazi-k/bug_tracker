@@ -55,6 +55,7 @@ public class ProjectController {
 
     @GetMapping
     public ResponseEntity<List<Project>> getAll() {
+        System.out.println("request");
         List<Project> projects = projectService.findAll();
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
