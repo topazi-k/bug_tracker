@@ -57,6 +57,13 @@ public class Project {
         projectMembers.remove(user);
     }
 
+    public void addTicket(Ticket ticket) {
+        tickets.add(ticket);
+    }
+    
+    public void removeTicket(Ticket ticket) {
+        tickets.remove(ticket);
+    }
     @Override
     public String toString() {
         return "Project [id=" + id + ", projectName=" + projectName + ", descripton=" + description + "]";

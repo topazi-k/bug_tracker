@@ -33,4 +33,8 @@ public class TicketCommentService {
         ticketRepository.save(ticket);
         return findByTicket(ticketId);
     }
+    
+    public void delete(long id) {
+        commentRepository.deleteById(id);
+    }
 }

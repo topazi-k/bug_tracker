@@ -23,7 +23,7 @@ public class TicketCustomSerializer extends StdSerializer<Ticket>{
         gen.writeStartObject();
         gen.writeNumberField("id", value.getId());
         gen.writeStringField("title", value.getTitle());
-        gen.writeStringField("fullDescription", value.getFullDesctiption());
+        gen.writeStringField("fullDescription", value.getFullDescription());
         gen.writeEndObject();
         
     }

@@ -2,6 +2,7 @@ package com.bug_tracker.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -45,18 +46,18 @@ public class Ticket {
     private String title;
 
     @Column(name = "description")
-    private String fullDesctiption;
+    private String fullDescription;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "ticket_id")
-    private List<TicketComment> comments;
+    private List<TicketComment> comments=new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "ticket_id")
-    private List<TicketLog> logs;
+    private List<TicketLog> logs=new ArrayList<>();
 
     @ManyToOne()
     @JoinColumn(name = "created_by")
@@ -66,7 +67,7 @@ public class Ticket {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "ticket_assigned_users", joinColumns = @JoinColumn(name = "ticket_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     @JsonSerialize(contentUsing =UserCustomSerializer.class)
-    private List<User> assignedUsers;
+    private List<User> assignedUsers=new ArrayList<>();
 
     @Column(name = "target_date")
     private LocalDate targetResolutionDate;
