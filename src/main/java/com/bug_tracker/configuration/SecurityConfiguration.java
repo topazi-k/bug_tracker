@@ -65,7 +65,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable().authorizeRequests().and()
+                .csrf().disable().cors().and().authorizeRequests().and()
                // .antMatchers(HttpMethod.GET,
                        // "/bug-track-react/public/index*", "/static/**", "/*.js", "/*.json", "/*.ico")
                // .permitAll()

@@ -16,7 +16,7 @@
 	<description>Control your workflow</description>
     <profiles>
 	 <profile>
-		 <id>internship</id>
+		 <id>bug_tracker</id>
 		 <activation>
 			 <activeByDefault>true</activeByDefault>
 		 </activation>
@@ -106,13 +106,6 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
-
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
 	</build>
 
 </project>
