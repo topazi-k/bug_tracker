@@ -14,10 +14,14 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>bug_tracker</name>
 	<description>Control your workflow</description>
-
-	<properties>
-		<java.version>12</java.version>
-	</properties>
+    <profiles>
+	 <profile>
+		 <id>internship</id>
+		 <activation>
+			 <activeByDefault>true</activeByDefault>
+		 </activation>
+	 </profile>
+	</profiles>
 
 	<dependencies>
 		<dependency>
@@ -95,12 +99,20 @@
 	</dependencies>
 
 	<build>
+
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 	</build>
 
 </project>

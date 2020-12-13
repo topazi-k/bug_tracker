@@ -23,7 +23,7 @@ public class UserDetailService implements UserDetailsService {
         User user;
         try {
             user = userRepo.findByEmail(userEmail);
-            System.out.print(user.getRole().getRole());
+            System.err.println(userEmail == null);
         } catch (EntityNotFoundException e) {
             throw new UsernameNotFoundException("user with email " + userEmail + " not found");
         }

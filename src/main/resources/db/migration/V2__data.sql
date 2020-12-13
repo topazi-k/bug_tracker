@@ -18,7 +18,7 @@ VALUES
 	('1', 'Ivan', 'Petrov', 'manager@gmai.com', '2001-09-28','2', '1111'),
 	('2', 'Oleg', 'Ivanov', 'developer@gmail.com', '2001-09-28', '3', '1111'),
 	('3', 'Jeck', 'Sparrow', 'tester@gmail.com', '2001-09-28','4', '1111'),
-	('4', 'Anton', 'Prokopov', 'admin@gmail.com', '2001-09-28','1', 'admin'),
+	('4', 'Anton', 'Prokopov', 'admin@gmail.com', '2001-09-28','1', '{noop}admin'),
 	('5', 'Ihor', 'Lvov', 'dev@gmail.com', '2001-09-28', '3', '1111');
 	
 INSERT INTO projects_users

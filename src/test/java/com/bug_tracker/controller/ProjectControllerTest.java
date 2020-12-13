@@ -30,10 +30,7 @@ class ProjectControllerTest {
         return projectJson;
     }
     
-    @Test
-    void test() {
-        fail("Not yet implemented");
-    }
+
     
     
 
