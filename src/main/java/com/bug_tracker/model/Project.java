@@ -1,27 +1,15 @@
 package com.bug_tracker.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
 import com.bug_tracker.service.jsonserializer.TicketCustomSerializer;
 import com.bug_tracker.service.jsonserializer.UserCustomSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import lombok.Data;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "projects")
@@ -40,13 +28,14 @@ public class Project {
     private String description;
 
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    @JoinTable(name = "projects_users", joinColumns = @JoinColumn(name = "project_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-    @JsonSerialize(contentUsing =UserCustomSerializer.class)
-    private List<User> projectMembers = new ArrayList<>();;
+    @JoinTable(name = "projects_users", joinColumns = {@JoinColumn(name = "project_id")}, inverseJoinColumns = {@JoinColumn(name = "user_id")})
+    @JsonSerialize(contentUsing = UserCustomSerializer.class)
+    private Set<User> projectMembers = new HashSet<>();
+    ;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
-    @JsonSerialize(contentUsing=TicketCustomSerializer.class)
+    @JsonSerialize(contentUsing = TicketCustomSerializer.class)
     private List<Ticket> tickets = new ArrayList<>();
 
     public void addUser(User user) {
@@ -60,10 +49,11 @@ public class Project {
     public void addTicket(Ticket ticket) {
         tickets.add(ticket);
     }
-    
+
     public void removeTicket(Ticket ticket) {
         tickets.remove(ticket);
     }
+
     @Override
     public String toString() {
         return "Project [id=" + id + ", projectName=" + projectName + ", descripton=" + description + "]";

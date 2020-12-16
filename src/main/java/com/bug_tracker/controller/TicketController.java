@@ -1,26 +1,18 @@
 package com.bug_tracker.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.bug_tracker.model.Ticket;
 import com.bug_tracker.model.dto.TicketDto;
 import com.bug_tracker.service.TicketService;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-@RestController()
-@RequestMapping("/tickets")
+import java.util.ArrayList;
+import java.util.List;
+
+@RestController
+@RequestMapping("/projects/{projectId}/tickets")
 public class TicketController {
 
     private TicketService ticketService;
@@ -32,8 +24,8 @@ public class TicketController {
     }
 
     @PostMapping
-    public ResponseEntity<TicketDto> create(@RequestBody TicketDto ticketDto) {
-        Ticket ticket = ticketService.create(convertToTicket(ticketDto));
+    public ResponseEntity<TicketDto> create(@PathVariable long projectId, @RequestBody TicketDto ticketDto) {
+        Ticket ticket = ticketService.create(projectId, convertToTicket(ticketDto));
 
         return new ResponseEntity<>(convertToTicketDto(ticket), HttpStatus.CREATED);
     }
@@ -41,26 +33,24 @@ public class TicketController {
     @GetMapping("/{id}")
     public ResponseEntity<TicketDto> getById(@PathVariable Long id) {
         Ticket ticket = ticketService.findById(id);
-
         return new ResponseEntity<>(convertToTicketDto(ticket), HttpStatus.OK);
     }
 
     // TODO : decide need or not?
     @GetMapping
-    public ResponseEntity<List<TicketDto>> getAll() {
-        List<Ticket> allTickets = ticketService.findAll();
+    public ResponseEntity<List<TicketDto>> findAllByProject(@PathVariable int projectId) {
+        List<Ticket> allTickets = ticketService.findAllByProject(projectId);
         List<TicketDto> allTicketsDto = new ArrayList<>();
-        TicketDto ticketDto = null;
         for (Ticket ticket : allTickets) {
-            ticketDto = convertToTicketDto(ticket);
+            TicketDto ticketDto = convertToTicketDto(ticket);
             allTicketsDto.add(ticketDto);
         }
         return new ResponseEntity<>(allTicketsDto, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Ticket> update(@RequestBody Ticket ticket, @PathVariable long id) { /// ??
-        ticketService.update(ticket);
+    public ResponseEntity<Ticket> update(@RequestBody Ticket ticket, @PathVariable long id) {
+        ticketService.update(ticket, id);
         return new ResponseEntity<>(ticket, HttpStatus.OK);
     }
 

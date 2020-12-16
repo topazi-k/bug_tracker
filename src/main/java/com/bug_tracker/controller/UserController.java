@@ -1,20 +1,13 @@
 package com.bug_tracker.controller;
 
-import java.util.List;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
-
 import com.bug_tracker.model.User;
 import com.bug_tracker.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -34,8 +27,8 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<List<User>> getAll() {
-        List<User> allUsers=userService.findAll();
-        return new ResponseEntity<>(allUsers,HttpStatus.OK);
+        List<User> allUsers = userService.findAll();
+        return new ResponseEntity<>(allUsers, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
@@ -43,8 +36,8 @@ public class UserController {
         if (id != user.getId()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "incorrect id");
         }
-        user=userService.update(user);
-        return new ResponseEntity<>(user,HttpStatus.OK);
+        user = userService.update(user);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

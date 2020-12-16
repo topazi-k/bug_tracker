@@ -1,36 +1,17 @@
 package com.bug_tracker.model;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
 import com.bug_tracker.model.enums.TicketPriority;
 import com.bug_tracker.model.enums.TicketStatus;
 import com.bug_tracker.model.enums.TicketType;
 import com.bug_tracker.service.jsonserializer.UserCustomSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import lombok.Data;
+
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tickets")
@@ -53,21 +34,25 @@ public class Ticket {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "ticket_id")
-    private List<TicketComment> comments=new ArrayList<>();
+    private List<TicketComment> comments = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "ticket_id")
-    private List<TicketLog> logs=new ArrayList<>();
+    private List<TicketLog> logs = new ArrayList<>();
 
     @ManyToOne()
     @JoinColumn(name = "created_by")
-    @JsonSerialize(using =UserCustomSerializer.class)
+    @JsonSerialize(using = UserCustomSerializer.class)
     private User createdBy;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id")
+    private Project project;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "ticket_assigned_users", joinColumns = @JoinColumn(name = "ticket_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-    @JsonSerialize(contentUsing =UserCustomSerializer.class)
-    private List<User> assignedUsers=new ArrayList<>();
+    @JsonSerialize(contentUsing = UserCustomSerializer.class)
+    private List<User> assignedUsers = new ArrayList<>();
 
     @Column(name = "target_date")
     private LocalDate targetResolutionDate;

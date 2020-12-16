@@ -16,7 +16,7 @@ import com.bug_tracker.model.TicketComment;
 import com.bug_tracker.service.TicketCommentService;
 
 @RestController()
-@RequestMapping("/tickets/{ticketId}/comments")
+@RequestMapping("projects/{id}/tickets/{ticketId}/comments")
 public class TicketCommentController {
 
     TicketCommentService commentService;

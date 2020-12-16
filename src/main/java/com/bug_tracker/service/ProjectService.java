@@ -40,7 +40,6 @@ public class ProjectService {
 
     public Project update(Project project) {
         return projectRepo.save(project);
-
     }
 
     public void delete(long id) {

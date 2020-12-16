@@ -44,7 +44,6 @@ public class ProjectController {
             @ApiResponse(code = 400, message = "Bad request") })
     public ResponseEntity<ProjectDto> create(@RequestBody ProjectDto projectDto) {
         Project project = projectService.create(converToProject(projectDto));
-        
         return new ResponseEntity<>(convertToProjectDto(project), HttpStatus.CREATED);
     }
 
@@ -55,7 +54,6 @@ public class ProjectController {
     public ResponseEntity<ProjectDto> getById(@PathVariable Long id) {
         Project project = projectService.findById(id);
         ProjectDto projectDto = modelMapper.map(project, ProjectDto.class);
-
         return new ResponseEntity<>(projectDto, HttpStatus.OK);
     }
 
