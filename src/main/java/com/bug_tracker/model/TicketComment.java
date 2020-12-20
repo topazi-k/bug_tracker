@@ -1,23 +1,11 @@
 package com.bug_tracker.model;
 
-import java.time.LocalDateTime;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
 import com.bug_tracker.service.jsonserializer.UserCustomSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import lombok.Data;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "ticket_comments")
@@ -37,7 +25,7 @@ public class TicketComment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
-    @JsonSerialize(using =UserCustomSerializer.class)
+    @JsonSerialize(using = UserCustomSerializer.class)
     private User createdBy;
 
     @PrePersist

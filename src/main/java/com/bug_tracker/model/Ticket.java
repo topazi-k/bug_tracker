@@ -11,7 +11,9 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "tickets")
@@ -34,7 +36,7 @@ public class Ticket {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "ticket_id")
-    private List<TicketComment> comments = new ArrayList<>();
+    private Set<TicketComment> comments = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "ticket_id")
@@ -52,7 +54,7 @@ public class Ticket {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "ticket_assigned_users", joinColumns = @JoinColumn(name = "ticket_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     @JsonSerialize(contentUsing = UserCustomSerializer.class)
-    private List<User> assignedUsers = new ArrayList<>();
+    private Set<User> assignedUsers = new HashSet<>();
 
     @Column(name = "target_date")
     private LocalDate targetResolutionDate;
@@ -88,4 +90,13 @@ public class Ticket {
         comments.add(comment);
     }
 
+    public TicketComment getCommentById(long commentId) {
+        TicketComment comment = null;
+        for (TicketComment ticketComment : comments) {
+            if (ticketComment.getId() == commentId) {
+                return comment;
+            }
+        }
+        return null;
+    }
 }

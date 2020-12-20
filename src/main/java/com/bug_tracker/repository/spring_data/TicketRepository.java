@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
-    @Query(value="Select * from tickets where project_id =?", nativeQuery= true)
+    @Query(value = "Select * from tickets where project_id =?", nativeQuery = true)
     List<Ticket> findTicketsByProject_projectId(int projectId);
 }

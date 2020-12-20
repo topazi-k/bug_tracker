@@ -60,6 +60,7 @@ public class TicketController {
         ticketService.delete(id);
     }
 
+
     private Ticket convertToTicket(TicketDto ticketDto) {
         return modelMapper.map(ticketDto, Ticket.class);
     }

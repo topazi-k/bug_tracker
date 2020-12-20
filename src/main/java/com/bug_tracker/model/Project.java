@@ -6,9 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -31,12 +29,11 @@ public class Project {
     @JoinTable(name = "projects_users", joinColumns = {@JoinColumn(name = "project_id")}, inverseJoinColumns = {@JoinColumn(name = "user_id")})
     @JsonSerialize(contentUsing = UserCustomSerializer.class)
     private Set<User> projectMembers = new HashSet<>();
-    ;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
     @JsonSerialize(contentUsing = TicketCustomSerializer.class)
-    private List<Ticket> tickets = new ArrayList<>();
+    private Set<Ticket> tickets = new HashSet<>();
 
     public void addUser(User user) {
         projectMembers.add(user);
