@@ -46,8 +46,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailService)
-                .passwordEncoder(delegatingPasswordEncoder());
+        auth.userDetailsService(userDetailService);
+              //  .passwordEncoder(delegatingPasswordEncoder());
 
     }
 
@@ -64,19 +64,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable().cors().and().authorizeRequests().and()
+        http.authorizeRequests()
+                .anyRequest().authenticated()
+                .and().formLogin();
+       // http
+              //  .csrf().disable().cors().and().authorizeRequests().and()
                // .antMatchers(HttpMethod.GET,
                        // "/bug-track-react/public/index*", "/static/**", "/*.js", "/*.json", "/*.ico")
                // .permitAll()
-               // .anyRequest().authenticated()
+               //.anyRequest().authenticated()
                // .and()
-                .formLogin()//.loginPage("/bug-track-react/public/index.html")
+          //      .formLogin()//.loginPage("/bug-track-react/public/index.html")
               //  .loginProcessingUrl("/perform_login")
-                .permitAll()
+             //   .permitAll()
                // .defaultSuccessUrl("/logine.html")
               //  .defaultSuccessUrl("/homepage.html",true)
               //  .failureUrl("/index.html?error=true")
-                .and();
+
+                  ;
     }
 }

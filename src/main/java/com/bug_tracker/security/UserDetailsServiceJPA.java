@@ -1,4 +1,4 @@
-package com.bug_tracker.service;
+package com.bug_tracker.security;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -9,25 +9,21 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.bug_tracker.model.User;
-import com.bug_tracker.model.UserDetailsSecurity;
 import com.bug_tracker.repository.spring_data.UserRepository;
 
+import static java.util.Objects.isNull;
+
 @Service
-public class UserDetailService implements UserDetailsService {
+public class UserDetailsServiceJPA implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepo;
 
     @Override
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
-        User user;
-        try {
-            user = userRepo.findByEmail(userEmail);
-            System.err.println(userEmail == null);
-        } catch (EntityNotFoundException e) {
-            throw new UsernameNotFoundException("user with email " + userEmail + " not found");
-        }
-        return new UserDetailsSecurity(user);
+        User user = userRepo.findByEmail(userEmail);
+        if (isNull(user)) throw new UsernameNotFoundException("User not found");
+        return new UserSecurity(user);
     }
 
 }
