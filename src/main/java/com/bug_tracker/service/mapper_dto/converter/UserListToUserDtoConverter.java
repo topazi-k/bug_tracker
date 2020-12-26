@@ -21,7 +21,7 @@ public class UserListToUserDtoConverter implements Converter<List<User> ,List<Us
             userDto.setFirstName(user.getFirstName());
             userDto.setLastName(user.getLastName());
             userDto.setEmail("emailTestconverter"/*user.getEmail()*/);
-            userDto.setRole(user.getRole());
+
             userDto.setCreatedAt(user.getCreatedAt());
             usersDto.add(userDto);
         }

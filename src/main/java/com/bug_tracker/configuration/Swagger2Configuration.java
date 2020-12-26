@@ -1,5 +1,6 @@
 package com.bug_tracker.configuration;
 
+import com.google.common.base.Predicates;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,12 +20,12 @@ public class Swagger2Configuration {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.bug_tracker.controller"))
+                .apis(Predicates.not(RequestHandlerSelectors.basePackage("org.springframework.boot")))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiEndPointsInfo());
     }
-    
+
     private ApiInfo apiEndPointsInfo() {
         return new ApiInfoBuilder().title("Bug tracker Rest API")
             .description("The default description will be changed in future)))")

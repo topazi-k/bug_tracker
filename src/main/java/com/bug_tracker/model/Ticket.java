@@ -91,12 +91,8 @@ public class Ticket {
     }
 
     public TicketComment getCommentById(long commentId) {
-        TicketComment comment = null;
-        for (TicketComment ticketComment : comments) {
-            if (ticketComment.getId() == commentId) {
-                return comment;
-            }
-        }
-        return null;
+        return comments.stream()
+                .filter(comment -> commentId == id)
+                .findFirst().orElseThrow(() -> new IllegalArgumentException("No comment with id -" + id));
     }
 }
