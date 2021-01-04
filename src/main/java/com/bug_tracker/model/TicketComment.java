@@ -1,7 +1,5 @@
 package com.bug_tracker.model;
 
-import com.bug_tracker.service.jsonserializer.UserCustomSerializer;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -25,7 +23,6 @@ public class TicketComment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
-    @JsonSerialize(using = UserCustomSerializer.class)
     private User createdBy;
 
     @PrePersist

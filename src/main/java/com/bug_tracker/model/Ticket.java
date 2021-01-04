@@ -3,8 +3,6 @@ package com.bug_tracker.model;
 import com.bug_tracker.model.enums.TicketPriority;
 import com.bug_tracker.model.enums.TicketStatus;
 import com.bug_tracker.model.enums.TicketType;
-import com.bug_tracker.service.jsonserializer.UserCustomSerializer;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -44,7 +42,6 @@ public class Ticket {
 
     @ManyToOne()
     @JoinColumn(name = "created_by")
-    @JsonSerialize(using = UserCustomSerializer.class)
     private User createdBy;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -53,7 +50,6 @@ public class Ticket {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "ticket_assigned_users", joinColumns = @JoinColumn(name = "ticket_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-    @JsonSerialize(contentUsing = UserCustomSerializer.class)
     private Set<User> assignedUsers = new HashSet<>();
 
     @Column(name = "target_date")

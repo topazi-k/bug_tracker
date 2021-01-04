@@ -27,12 +27,10 @@ public class Project {
 
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(name = "projects_users", joinColumns = {@JoinColumn(name = "project_id")}, inverseJoinColumns = {@JoinColumn(name = "user_id")})
-    @JsonSerialize(contentUsing = UserCustomSerializer.class)
     private Set<User> projectMembers = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
-    @JsonSerialize(contentUsing = TicketCustomSerializer.class)
     private Set<Ticket> tickets = new HashSet<>();
 
     public void addUser(User user) {

@@ -11,7 +11,5 @@ public class ProjectMap extends PropertyMap<Project, ProjectDto> {
 
     @Override
     protected void configure() {
-        //using(new UserListToUserDtoConverter()).map(source.getProjectMembers()).setProjectMembers(null);
-        //using(new TicketListToTicketDtoConverter()).map(source.getTickets()).setTickets(null);
     }
 }
