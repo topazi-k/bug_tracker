@@ -9,17 +9,16 @@ INSERT INTO users_roles
 VALUES
 	('1','ROLE_ADMIN'),
 	('2','ROLE_MANAGER'),
-	('3','ROLE_DEV'),
-	('4','ROLE_TESTER');
+	('3','ROLE_DEV');
 	
 INSERT INTO users
 	(id, first_name, last_name, email, created_at, role, password)
 VALUES
-	('1', 'Ivan', 'Petrov', 'manager@gmai.com', '2001-09-28','2', '1111'),
-	('2', 'Oleg', 'Ivanov', 'developer@gmail.com', '2001-09-28', '3', '1111'),
-	('3', 'Jeck', 'Sparrow', 'tester@gmail.com', '2001-09-28','4', '1111'),
+	('1', 'Ivan', 'Petrov', 'manager@gmai.com', '2001-09-28','2', '{noop}1111'),
+	('2', 'Oleg', 'Ivanov', 'developer@gmail.com', '2001-09-28', '3', '{noop}1111'),
+	('3', 'Jeck', 'Sparrow', 'tester@gmail.com', '2001-09-28','3', '{noop}1111'),
 	('4', 'Anton', 'Prokopov', 'admin@gmail.com', '2001-09-28','1', '{noop}admin'),
-	('5', 'Ihor', 'Lvov', 'dev@gmail.com', '2001-09-28', '3', '1111');
+	('5', 'Ihor', 'Lvov', 'dev@gmail.com', '2001-09-28', '3', '{noop}1111');
 	
 INSERT INTO projects_users
 	(project_id, user_id)

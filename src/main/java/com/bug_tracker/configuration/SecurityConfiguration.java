@@ -2,12 +2,15 @@ package com.bug_tracker.configuration;
 
 import com.bug_tracker.controller.AfterLoginController;
 import com.bug_tracker.security.UserDetailsServiceJPA;
+import com.bug_tracker.security.UserSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
@@ -21,7 +24,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     UserDetailsServiceJPA userDetailService;
@@ -31,9 +34,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         Map<String, PasswordEncoder> encoders = new HashMap<>();
         encoders.put("noop", NoOpPasswordEncoder.getInstance());
         encoders.put("bcrypt", new BCryptPasswordEncoder());
-        DelegatingPasswordEncoder passworEncoder = new DelegatingPasswordEncoder(
+        return new DelegatingPasswordEncoder(
                 "bcrypt", encoders);
-        return passworEncoder;
+
     }
 
     @Bean
@@ -61,7 +64,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http
+                .authorizeRequests()
+                .mvcMatchers("/users/{id}")
+                .access("isAuthenticated() and @securityConfiguration.checkUserId(authentication, #id)")
+                .mvcMatchers(HttpMethod.POST, "/").hasRole("ADMIN")
+                .mvcMatchers(HttpMethod.DELETE, "/projects/{id}").hasRole("ADMIN")
+                .mvcMatchers(HttpMethod.PUT, "/projects/{id}").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and().formLogin();
         // http
@@ -76,13 +85,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         //   .permitAll()
         // .defaultSuccessUrl("/logine.html")
         //  .defaultSuccessUrl("/homepage.html",true)
-        //  .failureUrl("/index.html?error=true")
-
-        ;
+        //  .failureUrl("/index.html?error=true");
     }
 
     @Autowired
     public void setUserDetailService(UserDetailsServiceJPA userDetailService) {
         this.userDetailService = userDetailService;
+    }
+
+    public boolean checkUserId(Authentication authentication, long id) {
+        long currentUserId = ((UserSecurity) authentication.getPrincipal()).getUserId();
+        return id == currentUserId;
     }
 }
