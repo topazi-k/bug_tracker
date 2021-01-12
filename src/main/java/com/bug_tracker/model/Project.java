@@ -1,8 +1,5 @@
 package com.bug_tracker.model;
 
-import com.bug_tracker.service.jsonserializer.TicketCustomSerializer;
-import com.bug_tracker.service.jsonserializer.UserCustomSerializer;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 
 import javax.persistence.*;
