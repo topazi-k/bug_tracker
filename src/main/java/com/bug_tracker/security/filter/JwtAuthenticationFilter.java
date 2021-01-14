@@ -1,17 +1,53 @@
 package com.bug_tracker.security.filter;
 
+import com.bug_tracker.security.JwtAuthentication;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.crypto.SecretKey;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+
+import static com.bug_tracker.security.SecurityConstants.*;
+import static java.lang.String.valueOf;
+
+@Component
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    @Value("${jwt.signing.key}")
+    private String signingKey;
+
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-        String jwt = request.getHeader("Authorization");
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String jwt = request.getHeader(AUTHORIZATION);
+
+        SecretKey key = Keys.hmacShaKeyFor(signingKey.getBytes(StandardCharsets.UTF_8));
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(jwt)
+                .getBody();
+        SecurityContextHolder.getContext().setAuthentication(createAuthentication(claims));
+        filterChain.doFilter(request, response);
+
+    }
+
+    private JwtAuthentication createAuthentication(Claims claims) {
+        System.out.println(claims);
+        long id = Long.parseLong(valueOf(claims.get(ID)));
+        ArrayList<String> authorities = (ArrayList<String>) claims.get(ROLE);
+        return new JwtAuthentication(id, authorities);
     }
 
     @Override
@@ -19,3 +55,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return request.getServletPath().equals("/login");
     }
 }
+
+

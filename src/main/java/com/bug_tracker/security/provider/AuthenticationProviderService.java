@@ -9,9 +9,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+
 public class AuthenticationProviderService implements AuthenticationProvider {
 
     @Autowired
@@ -27,7 +27,7 @@ public class AuthenticationProviderService implements AuthenticationProvider {
 
         UserSecurity user = userDetailsServiceJPA.loadUserByUsername(userName);
 
-        if (encoder.matches(password, user.getPassword())){
+        if (encoder.matches(password, user.getPassword())) {
             return new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities());
         }
         throw new BadCredentialsException("Bad credentials");

@@ -16,16 +16,16 @@ public class UserSecurity implements UserDetails {
      */
     private static final long serialVersionUID = 1L;
     private User user;
-    private List<GrantedAuthority> athorities = new ArrayList<>();
+    private List<GrantedAuthority> authorities = new ArrayList<>();
 
     public UserSecurity(User user) {
         this.user = user;
-        this.athorities.add(new SimpleGrantedAuthority(user.getRole().getRole()));
+        this.authorities.add(new SimpleGrantedAuthority(user.getRole().getRole()));
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return athorities;
+        return authorities;
     }
 
     @Override

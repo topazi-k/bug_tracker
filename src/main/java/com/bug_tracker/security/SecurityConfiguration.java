@@ -1,8 +1,7 @@
 package com.bug_tracker.security;
 
-import com.bug_tracker.controller.AfterLoginController;
 import com.bug_tracker.security.filter.InitialAuthenticationFilter;
-import com.bug_tracker.security.provider.AuthenticationProviderService;
+import com.bug_tracker.security.filter.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,13 +9,13 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -25,13 +24,16 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.springframework.http.HttpMethod.*;
+
 @EnableWebSecurity(debug = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
     private UserDetailsServiceJPA userDetailService;
     private InitialAuthenticationFilter initialAuthenticationFilter;
-    private AuthenticationProviderService authenticationProvider;
+    //    private AuthenticationProviderService authenticationProvider;
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     public SecurityConfiguration(UserDetailsServiceJPA userDetailsServiceJPA) {
         this.userDetailService = userDetailsServiceJPA;
@@ -49,7 +51,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AuthenticationSuccessHandler myAuthenticationSuccessHandler() {
-        return new AfterLoginController();
+        return new SuccessAuthenticationHandler();
     }
 
     @Bean
@@ -66,40 +68,26 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http.addFilterAt(
-                initialAuthenticationFilter,
-                BasicAuthenticationFilter.class);
-
         http.authorizeRequests()
+                .mvcMatchers("/users/{id}")
+                .access("isAuthenticated() and @securityConfiguration.checkUserId(authentication, #id)")
+                .mvcMatchers(POST, "/projects").hasRole("ADMIN")
+                .mvcMatchers(POST, "/projects/{id}").hasRole("ADMIN")
+                .mvcMatchers(DELETE, "/projects/{id}").hasRole("ADMIN")
+                .mvcMatchers(PUT, "/projects/{id}").hasRole("ADMIN")
                 .anyRequest().authenticated();
 
-//        http
-//                .authorizeRequests()
-//                .mvcMatchers("/users/{id}")
-//                .access("isAuthenticated() and @securityConfiguration.checkUserId(authentication, #id)")
-//                .mvcMatchers(HttpMethod.POST, "/").hasRole("ADMIN")
-//                .mvcMatchers(HttpMethod.DELETE, "/projects/{id}").hasRole("ADMIN")
-//                .mvcMatchers(HttpMethod.PUT, "/projects/{id}").hasRole("ADMIN")
-//                .anyRequest().authenticated()
-//                .and().formLogin();
-        // http
-        //  .csrf().disable().cors().and().authorizeRequests().and()
-        // .antMatchers(HttpMethod.GET,
-        // "/bug-track-react/public/index*", "/static/**", "/*.js", "/*.json", "/*.ico")
-        // .permitAll()
-        //.anyRequest().authenticated()
-        // .and()
-        //      .formLogin()//.loginPage("/bug-track-react/public/index.html")
-        //  .loginProcessingUrl("/perform_login")
-        //   .permitAll()
-        // .defaultSuccessUrl("/logine.html")
-        //  .defaultSuccessUrl("/homepage.html",true)
-        //  .failureUrl("/index.html?error=true");
+        http.addFilter(
+                initialAuthenticationFilter)
+                .addFilterAfter(jwtAuthenticationFilter, InitialAuthenticationFilter.class);
+
+        http.sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     public boolean checkUserId(Authentication authentication, long id) {
-        long currentUserId = ((UserSecurity) authentication.getPrincipal()).getUserId();
-        return id == currentUserId;
+        JwtAuthentication authentication1 = (JwtAuthentication) authentication.getPrincipal();
+        return id == authentication1.getId();
     }
 
     @Override
@@ -110,7 +98,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(authenticationProvider);
+        auth.userDetailsService(userDetailService).passwordEncoder(delegatingPasswordEncoder());
     }
 
 
@@ -120,8 +108,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    public void setAuthenticationProvider(AuthenticationProviderService authenticationProvider) {
-        this.authenticationProvider = authenticationProvider;
+    public void setJwtAuthenticationFilter(JwtAuthenticationFilter filter) {
+        this.jwtAuthenticationFilter = filter;
     }
+
+//    At this point no need to use custom auth provider( it does same job as default)
+//    But when I will create additional sms or email authentication it will need
+
+
+//    @Autowired
+//    public void setAuthenticationProvider(AuthenticationProviderService authenticationProvider) {
+//        this.authenticationProvider = authenticationProvider;
+//    }
 
 }
