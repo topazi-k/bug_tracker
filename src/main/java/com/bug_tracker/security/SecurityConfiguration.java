@@ -68,21 +68,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http.authorizeRequests()
-                .mvcMatchers("/users/{id}")
-                .access("isAuthenticated() and @securityConfiguration.checkUserId(authentication, #id)")
-                .mvcMatchers(POST, "/projects").hasRole("ADMIN")
-                .mvcMatchers(POST, "/projects/{id}").hasRole("ADMIN")
-                .mvcMatchers(DELETE, "/projects/{id}").hasRole("ADMIN")
-                .mvcMatchers(PUT, "/projects/{id}").hasRole("ADMIN")
-                .anyRequest().authenticated();
+        http
+                .addFilter(
+                        initialAuthenticationFilter)
+                .addFilterAfter(jwtAuthenticationFilter, InitialAuthenticationFilter.class)
 
-        http.addFilter(
-                initialAuthenticationFilter)
-                .addFilterAfter(jwtAuthenticationFilter, InitialAuthenticationFilter.class);
-
-        http.sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .authorizeRequests()
+                    .antMatchers("/registration").permitAll()
+                .and().authorizeRequests()
+                    .mvcMatchers("/users/{id}")
+                    .access("isAuthenticated() and @securityConfiguration.checkUserId(authentication, #id)")
+                    .mvcMatchers(POST, "/projects").hasRole("ADMIN")
+                    .mvcMatchers(POST, "/projects/{id}").hasRole("ADMIN")
+                    .mvcMatchers(DELETE, "/projects/{id}").hasRole("ADMIN")
+                    .mvcMatchers(PUT, "/projects/{id}").hasRole("ADMIN")
+                    .anyRequest().authenticated()
+                .and()
+                    .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     public boolean checkUserId(Authentication authentication, long id) {
