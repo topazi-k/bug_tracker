@@ -58,12 +58,15 @@ public class UserSecurity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        // TODO Auto-generated method stub
-        return true;
+        return user.isEnabled();
     }
 
     public long getUserId() {
         return user.getId();
+    }
+
+    public User getUser() {
+        return user;
     }
 
 }

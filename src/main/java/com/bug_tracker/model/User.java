@@ -42,6 +42,9 @@ public class User {
     @JoinColumn(name="role")
     private UserRole role;
 
+    @Column(name ="enabled")
+    private boolean enabled;
+
     @Column(name = "created_at")
     private LocalDate createdAt;
     
@@ -57,16 +60,6 @@ public class User {
     public String toString() {
         return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", role="
                 + role + ", createdAt=" + createdAt + "]";
-    }
-    
-    @JsonIgnore
-    public String getPassword() {
-        return password;
-    }
-    
-    @JsonProperty
-    public void setPassword(String password) {
-        this.password=password;
     }
 
     @Override

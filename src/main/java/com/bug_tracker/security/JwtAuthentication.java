@@ -20,7 +20,14 @@ public class JwtAuthentication implements Authentication {
         isAuthenticated = true;
     }
 
-    public long getId(){
+    public JwtAuthentication(Long id, String authority) {
+        this.id = id;
+        this.authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(authority));
+        isAuthenticated = true;
+    }
+
+    public long getId() {
         return id;
     }
 
