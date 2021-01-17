@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -30,15 +31,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        if (request.getHeader(AUTHORIZATION) == null) {
+            SecurityContextHolder.getContext().setAuthentication(null);
+            filterChain.doFilter(request, response);
+            return;
+        }
         String jwt = request.getHeader(AUTHORIZATION);
 
         SecretKey key = Keys.hmacShaKeyFor(signingKey.getBytes(StandardCharsets.UTF_8));
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(jwt)
-                .getBody();
-        SecurityContextHolder.getContext().setAuthentication(createAuthentication(claims));
+        Claims claims;
+        JwtAuthentication authentication;
+        try {
+            claims = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(jwt)
+                    .getBody();
+            authentication = createAuthentication(claims);
+        } catch (Exception e) {
+            throw new BadCredentialsException("Authentication failed");
+        }
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         filterChain.doFilter(request, response);
 
     }

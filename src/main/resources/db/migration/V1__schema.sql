@@ -1,25 +1,25 @@
-CREATE TABLE projects(
+CREATE TABLE IF NOT EXISTS projects(
 	id           SERIAL         PRIMARY KEY,
 	name         VARCHAR(50)    NOT NULL UNIQUE,
 	descript     VARCHAR
 );
 
-CREATE TABLE users_roles(
+CREATE TABLE IF NOT EXISTS users_roles(
 	id           SERIAL         PRIMARY KEY,
 	role         VARCHAR(20)    
 );
 
-CREATE TABLE users(
+CREATE TABLE IF NOT EXISTS users(
 	id           SERIAL         PRIMARY KEY,
 	first_name   VARCHAR(20)    NOT NULL,
 	last_name    VARCHAR(20)    NOT NULL,
 	email        VARCHAR(50)    NOT NULL UNIQUE,
 	created_at   DATE,
 	role         BIGINT,
-	password     VARCHAR        NOT NULL	
+	password     VARCHAR        NOT NULL
 );
 
-CREATE TABLE projects_users(
+CREATE TABLE IF NOT EXISTS projects_users(
 	project_id   BIGINT         NOT NULL,
 	user_id      BIGINT         NOT NULL,
 	CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES 
@@ -28,7 +28,7 @@ CREATE TABLE projects_users(
 			projects(id)
 );
 
-CREATE TABLE tickets(
+CREATE TABLE IF NOT EXISTS tickets(
 	id              SERIAL         PRIMARY KEY,
 	project_id      BIGINT         NOT NULL,
 	title           VARCHAR(30)    NOT NULL,
@@ -46,7 +46,7 @@ CREATE TABLE tickets(
 		REFERENCES projects(id)
 );
 
-CREATE TABLE ticket_assigned_users(
+CREATE TABLE IF NOT EXISTS ticket_assigned_users(
 	user_id 	    BIGINT         NOT NULL,
 	ticket_id       BIGINT         NOT NULL,
 	CONSTRAINT fk_user_id_users FOREIGN KEY (user_id)
@@ -56,7 +56,7 @@ CREATE TABLE ticket_assigned_users(
 		
 );
 
-CREATE TABLE ticket_comments(
+CREATE TABLE IF NOT EXISTS ticket_comments(
 	id          SERIAL          PRIMARY KEY,
 	comment     VARCHAR         NOT NULL,
 	created_at  TIMESTAMP       NOT NULL,
@@ -68,7 +68,7 @@ CREATE TABLE ticket_comments(
 		REFERENCES tickets(id)
 );
 
-CREATE TABLE ticket_log(
+CREATE TABLE IF NOT EXISTS ticket_log(
 	id          SERIAL          PRIMARY KEY,
 	message     VARCHAR         NOT NULL,
 	created_at  TIMESTAMP       NOT NULL,
