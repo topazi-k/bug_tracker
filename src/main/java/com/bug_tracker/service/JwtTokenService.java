@@ -36,7 +36,7 @@ public class JwtTokenService {
 
     private Map<String, Object> getClaims(User user) {
         Map<String, Object> claims = new HashMap<>();
-        String authorities = user.getRole().getRole();
+        String authorities = user.getRole().getRoleName();
         //  user.getRole().forEach(authority -> authoritiesssss.add(authority.getAuthority()));
         claims.put(ID, Long.toString(user.getId()));
         claims.put(ROLE, authorities);

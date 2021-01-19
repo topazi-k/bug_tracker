@@ -1,7 +1,9 @@
 package com.bug_tracker.controller;
 
 import com.bug_tracker.model.User;
+import com.bug_tracker.service.EmailServiceImpl;
 import com.bug_tracker.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,8 @@ import java.util.List;
 public class UserController {
 
     private UserService userService;
+    @Autowired
+    private EmailServiceImpl emailService;
 
     public UserController(UserService userService) {
         this.userService = userService;

@@ -2,6 +2,9 @@ package com.bug_tracker.controller;
 
 import com.bug_tracker.model.User;
 import com.bug_tracker.model.dto.UserDto;
+import com.bug_tracker.model.dto.UserRegistrationDto;
+import com.bug_tracker.security.SecurityConstants;
+import com.bug_tracker.service.registration.RegistrationEvent;
 import com.bug_tracker.service.registration.RegistrationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
 
+import static com.bug_tracker.security.SecurityConstants.EMAIL_CONFIRM_URL;
+
 @RestController
 @RequestMapping("/users/registration")
 public class RegistrationController {
@@ -21,16 +26,17 @@ public class RegistrationController {
     private ModelMapper modelMapper;
 
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody UserDto userDto) {
+    public ResponseEntity<String> create(@RequestBody UserRegistrationDto userDto) {
         User user = modelMapper.map(userDto, User.class);
         user = registrationService.createUser(user);
-        return new ResponseEntity<>("", HttpStatus.CREATED);
+        eventPublisher.publishEvent(new RegistrationEvent(user, SecurityConstants.BASE_URL + EMAIL_CONFIRM_URL));
+        return new ResponseEntity<>("Confirm your email ...", HttpStatus.CREATED);
     }
 
     @GetMapping("/confirm_email")
     public ResponseEntity<String> confirmEmail(@PathParam("token") String token) {
-
-        return null;
+        registrationService.confirmEmail(token);
+        return new ResponseEntity<>("Success registration",HttpStatus.ACCEPTED);
     }
 
     @Autowired

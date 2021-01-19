@@ -6,15 +6,19 @@ import org.springframework.context.ApplicationEvent;
 public class RegistrationEvent extends ApplicationEvent {
 
     private User user;
-    private String appUrl;
+    private String confirmUrl;
 
-    public RegistrationEvent(User user, String appUrl) {
+    public RegistrationEvent(User user, String confirmUrl) {
         super(user);
         this.user = user;
-        this.appUrl = appUrl;
+        this.confirmUrl =confirmUrl;
     }
 
-    public User getUser(){
+    public User getUser() {
         return user;
+    }
+
+    public String getConfirmUrl() {
+        return confirmUrl;
     }
 }

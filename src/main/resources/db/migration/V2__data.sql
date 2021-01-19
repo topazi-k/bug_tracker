@@ -9,7 +9,8 @@ INSERT INTO users_roles
 VALUES
 	('1','ROLE_ADMIN'),
 	('2','ROLE_MANAGER'),
-	('3','ROLE_DEV');
+	('3','ROLE_DEV'),
+    ('4','ROLE_GUEST');
 	
 INSERT INTO users
 	(id, first_name, last_name, email, created_at, role, password)

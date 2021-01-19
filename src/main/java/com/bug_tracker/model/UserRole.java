@@ -21,11 +21,11 @@ public class UserRole {
     private long id;
     
     @Column(name="role")
-    private String role;
+    private String roleName;
 
     @Override
     public String toString() {
-        return "UserRole [id=" + id + ", role=" + role + "]";
+        return "UserRole [id=" + id + ", role=" + roleName + "]";
     }
 
     @Override
@@ -39,10 +39,10 @@ public class UserRole {
         UserRole other = (UserRole) obj;
         if (id != other.id)
             return false;
-        if (role == null) {
-            if (other.role != null)
+        if (roleName == null) {
+            if (other.roleName != null)
                 return false;
-        } else if (!role.equals(other.role))
+        } else if (!roleName.equals(other.roleName))
             return false;
         return true;
     }
@@ -52,7 +52,7 @@ public class UserRole {
         final int prime = 31;
         int result = 1;
         result = prime * result + (int) (id ^ (id >>> 32));
-        result = prime * result + ((role == null) ? 0 : role.hashCode());
+        result = prime * result + ((roleName == null) ? 0 : roleName.hashCode());
         return result;
     }
     

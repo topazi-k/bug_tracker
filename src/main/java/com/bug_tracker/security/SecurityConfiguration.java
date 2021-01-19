@@ -4,6 +4,7 @@ import com.bug_tracker.security.filter.InitialAuthenticationFilter;
 import com.bug_tracker.security.filter.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -54,29 +55,29 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new SuccessAuthenticationHandler();
     }
 
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
-        configuration.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+//    @Bean
+//    CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(Arrays.asList("*"));
+//        configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
+//        configuration.setAllowCredentials(true);
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
+        http.csrf().disable().cors().disable();
         http
                 .addFilter(
                         initialAuthenticationFilter)
                 .addFilterAfter(jwtAuthenticationFilter, InitialAuthenticationFilter.class)
 
                 .authorizeRequests()
-                    .antMatchers("/registration").permitAll()
+                    .antMatchers("/users/registration").permitAll()
                 .and().authorizeRequests()
-                    .mvcMatchers("/users/{id}")
+                    .mvcMatchers(POST,"/users/{id}")
                     .access("isAuthenticated() and @securityConfiguration.checkUserId(authentication, #id)")
                     .mvcMatchers(POST, "/projects").hasRole("ADMIN")
                     .mvcMatchers(POST, "/projects/{id}").hasRole("ADMIN")

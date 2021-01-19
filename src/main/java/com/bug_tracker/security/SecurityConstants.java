@@ -13,6 +13,8 @@ public class SecurityConstants {
     public static final String VERIFIC_MAIL_SUBJECT = "Registration Confirmation";
     public static final long VERIFICATION_DURATION =24;
 
+    public static final String DEFAULT_ROLE = "ROLE_GUEST";
+
 
     //Temporary for testing
     public static final String BASE_URL = "http://localhost:8080";

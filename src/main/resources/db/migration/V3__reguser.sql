@@ -7,7 +7,7 @@
 --     token        VARCHAR        NOT NULL
 -- );
 ALTER TABLE users ADD COLUMN
-    enabled BOOLEAN;
+    enabled BOOLEAN NOT NULL default false;
 
 CREATE TABLE IF NOT EXISTS reg_token(
     token         VARCHAR(200)   PRIMARY KEY,

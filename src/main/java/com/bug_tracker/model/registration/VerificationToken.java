@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import static com.bug_tracker.security.SecurityConstants.VERIFICATION_DURATION;
 
 @Entity
+@Table(name="reg_token")
 @Data
 public class VerificationToken {
 

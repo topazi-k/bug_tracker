@@ -20,7 +20,7 @@ public class UserSecurity implements UserDetails {
 
     public UserSecurity(User user) {
         this.user = user;
-        this.authorities.add(new SimpleGrantedAuthority(user.getRole().getRole()));
+        this.authorities.add(new SimpleGrantedAuthority(user.getRole().getRoleName()));
     }
 
     @Override

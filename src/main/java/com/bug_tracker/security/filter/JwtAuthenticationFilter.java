@@ -41,6 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             throw new BadCredentialsException("Authentication failed");
         }
+        response.setHeader(AUTHORIZATION, jwt);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         filterChain.doFilter(request, response);
     }

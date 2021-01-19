@@ -2,20 +2,21 @@ package com.bug_tracker.service.registration;
 
 import com.bug_tracker.model.User;
 import com.bug_tracker.model.registration.VerificationToken;
+import com.bug_tracker.service.EmailServiceImpl;
 import com.bug_tracker.service.JwtTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.MessageSource;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Component;
 
-import static com.bug_tracker.security.SecurityConstants.*;
+import static com.bug_tracker.security.SecurityConstants.TOKEN_PARAM;
+import static com.bug_tracker.security.SecurityConstants.VERIFIC_MAIL_SUBJECT;
 
+@Component
 public class RegistrationListener implements ApplicationListener<RegistrationEvent> {
 
     private JwtTokenService tokenService;
     private RegistrationService registrationService;
-    private MessageSource messageSource;
-    private JavaMailSender mailSender;
+    private EmailServiceImpl emailService;
 
     @Override
     public void onApplicationEvent(RegistrationEvent event) {
@@ -28,13 +29,12 @@ public class RegistrationListener implements ApplicationListener<RegistrationEve
         VerificationToken token = new VerificationToken();
         token.setUser(user);
         token.setJwtToken(jwtToken);
-        registrationService.saveToken(token);
-
+        registrationService.saveVerificationToken(token);
         String recipientAddress = user.getEmail();
         String subject = VERIFIC_MAIL_SUBJECT;
-        String confirmUrl = BASE_URL + EMAIL_CONFIRM_URL + "?" + TOKEN_PARAM + "=" + jwtToken;
-
-
+        String confirmUrl = event.getConfirmUrl() + "?" + TOKEN_PARAM + "=" + jwtToken;
+        emailService.sendConfirmMail(recipientAddress, subject, confirmUrl);
+        System.out.println("message sended");
     }
 
     @Autowired
@@ -47,13 +47,8 @@ public class RegistrationListener implements ApplicationListener<RegistrationEve
         this.registrationService = registrationService;
     }
 
-    @Autowired
-    public void setMessageSource(MessageSource messageSource) {
-        this.messageSource = messageSource;
-    }
-
-    @Autowired
-    public void setMailSender(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
-    }
+   @Autowired
+    public void setEmailService(EmailServiceImpl emailService){
+        this.emailService = emailService;
+   }
 }

@@ -28,6 +28,7 @@ public class InitialAuthenticationFilter extends UsernamePasswordAuthenticationF
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         String username = obtainUsername(request);
         String password = obtainPassword(request);
+        System.out.println(username +" " + password);
         Authentication auth = new UsernamePasswordAuthenticationToken(username, password);
         return this.getAuthenticationManager().authenticate(auth);
     }
