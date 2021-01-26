@@ -13,8 +13,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.bug_tracker.security.SecurityConstants.ID;
-import static com.bug_tracker.security.SecurityConstants.ROLE;
+import static com.bug_tracker.constants.SecurityConstants.ID;
+import static com.bug_tracker.constants.SecurityConstants.ROLE;
 import static java.lang.String.valueOf;
 
 @Component

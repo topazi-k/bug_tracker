@@ -1,7 +1,7 @@
 package com.bug_tracker.security.filter;
 
 import com.bug_tracker.model.User;
-import com.bug_tracker.security.UserSecurity;
+import com.bug_tracker.security.UserDetailsImpl;
 import com.bug_tracker.service.JwtTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.bug_tracker.security.SecurityConstants.*;
+import static com.bug_tracker.constants.SecurityConstants.*;
 
 @Component
 public class InitialAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -37,7 +37,7 @@ public class InitialAuthenticationFilter extends UsernamePasswordAuthenticationF
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authResult) throws IOException, ServletException {
 
-        User user = ((UserSecurity) authResult.getPrincipal()).getUser();
+        User user = ((UserDetailsImpl) authResult.getPrincipal()).getUser();
         String jwt = tokenService.createJwtToken(user);
         response.setHeader(AUTHORIZATION, jwt);
         response.setStatus(200);

@@ -1,9 +1,8 @@
 package com.bug_tracker.controller;
 
 import com.bug_tracker.model.User;
-import com.bug_tracker.model.dto.UserDto;
 import com.bug_tracker.model.dto.UserRegistrationDto;
-import com.bug_tracker.security.SecurityConstants;
+import com.bug_tracker.constants.SecurityConstants;
 import com.bug_tracker.service.registration.RegistrationEvent;
 import com.bug_tracker.service.registration.RegistrationService;
 import org.modelmapper.ModelMapper;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
 
-import static com.bug_tracker.security.SecurityConstants.EMAIL_CONFIRM_URL;
+import static com.bug_tracker.constants.SecurityConstants.EMAIL_CONFIRM_URL;
 
 @RestController
 @RequestMapping("/users/registration")

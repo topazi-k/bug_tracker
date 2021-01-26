@@ -1,7 +1,7 @@
 package com.bug_tracker.security.provider;
 
 import com.bug_tracker.security.UserDetailsServiceJPA;
-import com.bug_tracker.security.UserSecurity;
+import com.bug_tracker.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -9,7 +9,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
 
 public class AuthenticationProviderService implements AuthenticationProvider {
@@ -25,7 +24,7 @@ public class AuthenticationProviderService implements AuthenticationProvider {
         String userName = authentication.getName();
         String password = authentication.getCredentials().toString();
 
-        UserSecurity user = userDetailsServiceJPA.loadUserByUsername(userName);
+        UserDetailsImpl user = userDetailsServiceJPA.loadUserByUsername(userName);
 
         if (encoder.matches(password, user.getPassword())) {
             return new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities());

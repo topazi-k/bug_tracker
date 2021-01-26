@@ -1,4 +1,4 @@
-package com.bug_tracker.security;
+package com.bug_tracker.constants;
 
 public class SecurityConstants {
 

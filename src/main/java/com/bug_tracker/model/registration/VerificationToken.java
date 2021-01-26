@@ -6,7 +6,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-import static com.bug_tracker.security.SecurityConstants.VERIFICATION_DURATION;
+import static com.bug_tracker.constants.SecurityConstants.VERIFICATION_DURATION;
 
 @Entity
 @Table(name="reg_token")

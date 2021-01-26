@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
-import static com.bug_tracker.security.SecurityConstants.TOKEN_PARAM;
-import static com.bug_tracker.security.SecurityConstants.VERIFIC_MAIL_SUBJECT;
+import static com.bug_tracker.constants.SecurityConstants.TOKEN_PARAM;
+import static com.bug_tracker.constants.SecurityConstants.VERIFIC_MAIL_SUBJECT;
 
 @Component
 public class RegistrationListener implements ApplicationListener<RegistrationEvent> {

@@ -1,9 +1,9 @@
 package com.bug_tracker.controller;
 
 import com.bug_tracker.model.User;
-import com.bug_tracker.service.EmailServiceImpl;
+import com.bug_tracker.model.dto.UserDto;
 import com.bug_tracker.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,17 +16,17 @@ import java.util.List;
 public class UserController {
 
     private UserService userService;
-    @Autowired
-    private EmailServiceImpl emailService;
+    private ModelMapper mapper;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, ModelMapper mapper) {
         this.userService = userService;
+        this.mapper = mapper;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getById(@PathVariable Long id) {
-        User user = userService.findById(id);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    public ResponseEntity<UserDto> getById(@PathVariable Long id) {
+        UserDto userDto = mapper.map(userService.findById(id), UserDto.class);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
     @GetMapping
@@ -48,4 +48,6 @@ public class UserController {
     public void delete(@PathVariable Long id) {
         userService.delete(id);
     }
+
+
 }

@@ -1,6 +1,6 @@
 package com.bug_tracker.service.registration;
 
-import com.bug_tracker.exceptions.UserAlreadyExistsException;
+import com.bug_tracker.exceptions.custom.UserAlreadyExistsException;
 import com.bug_tracker.model.User;
 import com.bug_tracker.model.UserRole;
 import com.bug_tracker.model.registration.VerificationToken;
@@ -9,8 +9,6 @@ import com.bug_tracker.repository.spring_data.VerificationTokenRepository;
 import com.bug_tracker.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import static com.bug_tracker.security.SecurityConstants.DEFAULT_ROLE;
 
 @Component
 public class RegistrationService {

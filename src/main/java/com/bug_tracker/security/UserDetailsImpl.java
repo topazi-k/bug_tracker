@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class UserSecurity implements UserDetails {
+public class UserDetailsImpl implements UserDetails {
 
     /**
      *
@@ -18,7 +18,7 @@ public class UserSecurity implements UserDetails {
     private User user;
     private List<GrantedAuthority> authorities = new ArrayList<>();
 
-    public UserSecurity(User user) {
+    public UserDetailsImpl(User user) {
         this.user = user;
         this.authorities.add(new SimpleGrantedAuthority(user.getRole().getRoleName()));
     }
