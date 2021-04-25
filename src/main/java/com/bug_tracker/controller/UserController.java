@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -24,9 +25,10 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getById(@PathVariable Long id) {
-        UserDto userDto = mapper.map(userService.findById(id), UserDto.class);
-        return new ResponseEntity<>(userDto, HttpStatus.OK);
+    @CrossOrigin("http://localhost:3000")
+    public ResponseEntity<User> getById(@PathVariable Long id) {
+        User user = userService.findById(id);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @GetMapping
@@ -36,10 +38,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> update(@RequestBody User user, @PathVariable long id) {
-        if (id != user.getId()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "incorrect id");
-        }
+    public ResponseEntity<User> update(@Valid @RequestBody User user, @PathVariable long id) {
         user = userService.update(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }

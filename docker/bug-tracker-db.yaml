@@ -1,0 +1,19 @@
+version: '3.1'
+services:
+  bug-tracker-postgres:
+    container_name: bug-tracker-postgres
+    image: postgres:12.4
+    restart: always
+    networks:
+      bug-tracker-network:
+    ports:
+      - "5433:5432"
+
+    environment:
+      COMPOSE_PROJECT_NAME: bug-tracker
+      POSTGRES_DB: bug_tracker
+      POSTGRES_USER: anatolii
+      POSTGRES_PASSWORD: 12345
+
+networks:
+  bug-tracker-network:

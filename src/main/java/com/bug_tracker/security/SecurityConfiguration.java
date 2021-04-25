@@ -2,6 +2,7 @@ package com.bug_tracker.security;
 
 import com.bug_tracker.security.filter.InitialAuthenticationFilter;
 import com.bug_tracker.security.filter.JwtAuthenticationFilter;
+import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -55,20 +56,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new SuccessAuthenticationHandler();
     }
 
-//    @Bean
-//    CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOrigins(Arrays.asList("*"));
-//        configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
-//        configuration.setAllowCredentials(true);
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedHeaders(ImmutableList.of("Authorization", "Cache-Control", "Content-Type","access-control-allow-origin"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().cors().disable();
+    //    http.csrf().and().cors().disable();
+        http.cors();
         http
                 .addFilter(
                         initialAuthenticationFilter)
@@ -76,6 +81,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                 .authorizeRequests()
                     .antMatchers("/users/registration").permitAll()
+               // .antMatchers(OPTIONS).permitAll()
                 .and().authorizeRequests()
                     .mvcMatchers(POST,"/users/{id}")
                     .access("isAuthenticated() and @securityConfiguration.checkUserId(authentication, #id)")
